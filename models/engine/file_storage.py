@@ -31,12 +31,10 @@ class FileStorage:
         """
         dic = {}
         if cls:
-            # If a class is provided, filter by that class
             for key, obj in self.__objects.items():
                 if obj.__class__ == cls:
                     dic[key] = obj
         else:
-            # Otherwise, return all objects
             dic = self.__objects
         return dic
 
@@ -60,7 +58,6 @@ class FileStorage:
             with open(self.__file_path, 'r', encoding="UTF-8") as f:
                 data = json.load(f)
                 for key, value in data.items():
-                    # Dynamically instantiate the class from the dictionary
                     class_name = value["__class__"]
                     class_obj = globals()[class_name]
                     self.__objects[key] = class_obj(**value)
