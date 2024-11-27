@@ -10,8 +10,7 @@ from models.city import City
 import os
 
 
-# skip these test if the storage is not db
-@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "skip if not fs")
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "skip if not db")
 class TestDBStorage(unittest.TestCase):
     """DB Storage test"""
 
@@ -20,83 +19,86 @@ class TestDBStorage(unittest.TestCase):
         self.storage = models.storage
 
     def tearDown(self):
-        """ Remove storage file at end of tests """
-        del self.storage
+        """ Clean up after tests """
+        # Clear out storage between tests
+        self.storage.close()
 
     def test_user(self):
         """ Tests user """
         user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
         user.save()
-        self.assertFalse(user.id in self.storage.all())
-        self.assertEqual(user.name, "Chyna")
+        stored_user = self.storage.all(User).get(user.id)
+        self.assertIsNotNone(stored_user)
+        self.assertEqual(stored_user.name, "Chyna")
 
     def test_city(self):
         """ test city """
         state = State(name="California")
         state.save()
-        city = City(name="Batch")
-        city.state_id = state.id
+
+        city = City(name="Batch", state_id=state.id)
         city.save()
-        self.assertFalse(city.id in self.storage.all())
-        self.assertEqual(city.name, "Batch")
+
+        stored_city = self.storage.all(City).get(city.id)
+        self.assertIsNotNone(stored_city)
+        self.assertEqual(stored_city.name, "Batch")
+        self.assertEqual(stored_city.state_id, state.id)
 
     def test_state(self):
-        """ test state"""
+        """ test state """
         state = State(name="California")
         state.save()
-        self.assertFalse(state.id in self.storage.all())
-        self.assertEqual(state.name, "California")
+        stored_state = self.storage.all(State).get(state.id)
+        self.assertIsNotNone(stored_state)
+        self.assertEqual(stored_state.name, "California")
 
     def test_place(self):
-        """Test place"""
+        """ Test place """
         state = State(name="California")
         state.save()
 
-        city = City(name="Batch")
-        city.state_id = state.id
+        city = City(name="Batch", state_id=state.id)
         city.save()
 
         user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
         user.save()
 
-        place = Place(name="Palace", number_rooms=4)
-        place.city_id = city.id
-        place.user_id = user.id
+        place = Place(name="Palace", number_rooms=4, city_id=city.id, user_id=user.id)
         place.save()
 
-        self.assertFalse(place.id in self.storage.all())
-        self.assertEqual(place.number_rooms, 4)
-        self.assertEqual(place.name, "Palace")
+        stored_place = self.storage.all(Place).get(place.id)
+        self.assertIsNotNone(stored_place)
+        self.assertEqual(stored_place.name, "Palace")
+        self.assertEqual(stored_place.number_rooms, 4)
 
     def test_amenity(self):
-        """ test amenity """
+        """ Test amenity """
         amenity = Amenity(name="Startlink")
         amenity.save()
-        self.assertFalse(amenity.id in self.storage.all())
-        self.assertTrue(amenity.name, "Startlink")
+        stored_amenity = self.storage.all(Amenity).get(amenity.id)
+        self.assertIsNotNone(stored_amenity)
+        self.assertEqual(stored_amenity.name, "Startlink")
 
     def test_review(self):
-        """ test review """
+        """ Test review """
         state = State(name="California")
         state.save()
 
-        city = City(name="Batch")
-        city.state_id = state.id
+        city = City(name="Batch", state_id=state.id)
         city.save()
 
         user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
         user.save()
 
-        place = Place(name="Palace", number_rooms=4)
-        place.city_id = city.id
-        place.user_id = user.id
+        place = Place(name="Palace", number_rooms=4, city_id=city.id, user_id=user.id)
         place.save()
 
         review = Review(text="no comment", place_id=place.id, user_id=user.id)
         review.save()
 
-        self.assertFalse(review.id in self.storage.all())
-        self.assertEqual(review.text, "no comment")
+        stored_review = self.storage.all(Review).get(review.id)
+        self.assertIsNotNone(stored_review)
+        self.assertEqual(stored_review.text, "no comment")
 
 
 if __name__ == '__main__':

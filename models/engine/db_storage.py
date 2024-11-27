@@ -52,7 +52,7 @@ class DBStorage:
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dic[key] = elem
-        return (dic)
+        return dic
 
     def new(self, obj):
         """add a new element in the table
