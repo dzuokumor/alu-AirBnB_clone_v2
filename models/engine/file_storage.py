@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the file storage class for AirBnB"""
+
 import warnings
 import json
 import shlex
@@ -12,6 +13,7 @@ from models.review import Review
 
 warnings.filterwarnings("ignore", category=FutureWarning, module="pep8")
 
+
 class FileStorage:
     """This class serializes instances to a JSON file and
     deserializes JSON file to instances.
@@ -23,7 +25,10 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of all objects of a given class (or all if cls is None)."""
+        """
+        Returns a dictionary of all objects of a given class
+        (or all if cls is None).
+        """
         dic = {}
         if cls:
             # If a class is provided, filter by that class
@@ -72,5 +77,3 @@ class FileStorage:
     def close(self):
         """Calls reload to refresh the objects in memory."""
         self.reload()
-
-
