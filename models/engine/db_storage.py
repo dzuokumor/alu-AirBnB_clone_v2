@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 """ new class for sqlAlchemy """
 from os import getenv
-from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.amenity import Amenity
 from models.base_model import BaseModel
-from models.state import State
 from models.city import City
-from models.user import User
 from models.place import Place
 from models.review import Review
-from models.amenity import Amenity
+from models.state import State
+from models.user import User
 
 
 class DBStorage:
@@ -65,10 +64,9 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table
-        """
+        """delete an element in the table"""
         if obj:
-            self.session.delete(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """configuration
