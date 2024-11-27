@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 """ new class for sqlAlchemy """
 from os import getenv
-from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker, scoped_session
-from models.amenity import Amenity
-from models.base_model import BaseModel
+from sqlalchemy import (create_engine)
+from models.base_model import Base
+from models.state import State
 from models.city import City
+from models.user import User
 from models.place import Place
 from models.review import Review
-from models.state import State
-from models.user import User
+from models.amenity import Amenity
 
 
 class DBStorage:
@@ -29,7 +29,7 @@ class DBStorage:
                                       pool_pre_ping=True)
 
         if env == "test":
-            BaseModel.metadata.drop_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """returns a dictionary
@@ -64,14 +64,14 @@ class DBStorage:
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table"""
+        """Delete an object from the session."""
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
         """configuration
         """
-        BaseModel.metadata.create_all(self.__engine)
+        Base.metadata.create_all(self.__engine)
         sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sec)
         self.__session = Session()
@@ -79,4 +79,4 @@ class DBStorage:
     def close(self):
         """ calls remove()
         """
-        self.__session.close()
+        self.__session.remove()
