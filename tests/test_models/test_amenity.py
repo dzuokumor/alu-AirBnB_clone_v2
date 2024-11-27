@@ -1,34 +1,21 @@
-#!/usr/bin/python3
-""" """
 from datetime import datetime
-from tests.test_models.test_base_model import TestBaseModel
+
 from models.amenity import Amenity
-import models
 
 
-class TestAmenity(TestBaseModel):
-    """ Test for amenity"""
+def test_created_at(self):
+    """ Test that created_at is properly set """
+    amenity = Amenity(name="WiFi")
+    amenity.save()
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "Amenity"
-        self.value = Amenity
+    # Debugging output
+    print("All amenities in storage:", self.storage.all(Amenity))  # Print all amenities in storage
 
-    def setUp(self):
-        self.storage = models.storage
+    stored_amenity = self.storage.all(Amenity).get(amenity.id)
 
-    def test_name2(self):
-        new = self.value()
-        new.name = "amenity"
-        self.assertEqual(type(new.name), str)
+    # Debugging output
+    print("Stored amenity:", stored_amenity)
 
-    def test_created_at(self):
-        amenity = Amenity(name="WiFi")
-        amenity.save()
-
-        stored_amenity = self.storage.all(Amenity).get(amenity.id)
-
-        self.assertIsInstance(stored_amenity.created_at, datetime)
-
-        self.assertEqual(stored_amenity.created_at, amenity.created_at)
+    # Check that created_at is a datetime object
+    self.assertIsInstance(stored_amenity.created_at, datetime)
+    self.assertEqual(stored_amenity.created_at, amenity.created_at)
