@@ -25,7 +25,9 @@ class TestDBStorage(unittest.TestCase):
 
     def test_user(self):
         """ Tests user """
-        user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
+        user = User(
+            name="Chyna", email="chyna@gmail.com", password="Chyna12345"
+        )
         user.save()
         stored_user = self.storage.all(User).get(user.id)
         self.assertIsNotNone(stored_user)
@@ -60,10 +62,14 @@ class TestDBStorage(unittest.TestCase):
         city = City(name="Batch", state_id=state.id)
         city.save()
 
-        user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
+        user = User(
+            name="Chyna", email="chyna@gmail.com", password="Chyna12345"
+        )
         user.save()
 
-        place = Place(name="Palace", number_rooms=4, city_id=city.id, user_id=user.id)
+        place = Place(
+            name="Palace", number_rooms=4, city_id=city.id, user_id=user.id
+        )
         place.save()
 
         stored_place = self.storage.all(Place).get(place.id)
@@ -87,13 +93,19 @@ class TestDBStorage(unittest.TestCase):
         city = City(name="Batch", state_id=state.id)
         city.save()
 
-        user = User(name="Chyna", email="chyna@gmail.com", password="Chyna12345")
+        user = User(
+            name="Chyna", email="chyna@gmail.com", password="Chyna12345"
+        )
         user.save()
 
-        place = Place(name="Palace", number_rooms=4, city_id=city.id, user_id=user.id)
+        place = Place(
+            name="Palace", number_rooms=4, city_id=city.id, user_id=user.id
+        )
         place.save()
 
-        review = Review(text="no comment", place_id=place.id, user_id=user.id)
+        review = Review(
+            text="no comment", place_id=place.id, user_id=user.id
+        )
         review.save()
 
         stored_review = self.storage.all(Review).get(review.id)
