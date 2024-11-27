@@ -25,7 +25,6 @@ class TestFileStorage(unittest.TestCase):
             os.remove('file.json')
         except FileNotFoundError:
             pass
-
         del self.storage
 
     def test_obj_list_empty(self):
@@ -109,5 +108,4 @@ class TestFileStorage(unittest.TestCase):
     def test_storage_var_created(self):
         """ FileStorage object storage created """
         from models.engine.file_storage import FileStorage
-        print(type(self.storage))
         self.assertEqual(type(self.storage), FileStorage)
