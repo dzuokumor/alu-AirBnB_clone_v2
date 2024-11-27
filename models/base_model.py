@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 """This is the base model class for AirBnB"""
-from sqlalchemy.ext.declarative import declarative_base
+import sqlalchemy.ext.declarative
 import uuid
 import models
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
 
 
-Base = declarative_base()
+Base = sqlalchemy.ext.declarative.declarative_base()
 
 
 class BaseModel:
@@ -53,8 +53,7 @@ class BaseModel:
             type(self).__name__, self.id, self.__dict__)
 
     def __repr__(self):
-        """return a string representaion
-        """
+        """return a string representation"""
         return self.__str__()
 
     def save(self):
