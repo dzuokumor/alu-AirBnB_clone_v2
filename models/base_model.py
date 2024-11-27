@@ -9,19 +9,22 @@ class BaseModel:
     metadata = None
 
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
+        """Instantiates a new model"""
         if not kwargs:
+            # If no kwargs are passed, generate new values
             from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
+            # Use 'get' to handle missing 'updated_at' and 'created_at'
+            self.id = kwargs.get('id', str(uuid.uuid4()))  # default if 'id' is missing
+            self.created_at = datetime.strptime(kwargs.get('created_at', datetime.now().isoformat()),
+                                                 '%Y-%m-%dT%H:%M:%S.%f')
+            self.updated_at = datetime.strptime(kwargs.get('updated_at', datetime.now().isoformat()),
+                                                 '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']  # Remove the class name if present in kwargs
             self.__dict__.update(kwargs)
 
     def __str__(self):
