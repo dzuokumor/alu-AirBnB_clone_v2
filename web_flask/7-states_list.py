@@ -3,7 +3,7 @@
 Web application is listening on 0.0.0.0, port 5000 """
 
 from flask import Flask, render_template
-from models import storage
+from models import FileStorage
 from models.state import State
 
 app = Flask(__name__)
@@ -13,13 +13,13 @@ app = Flask(__name__)
 def states():
     """Returns list of states"""
     return render_template('7-states_list.html',
-                           states=storage.all('State').values())
+                           states=FileStorage.all('State').values())
 
 
 @app.teardown_appcontext
 def teardown(self):
     """Closes the current SQLAlchemy session"""
-    storage.close()
+    FileStorage.close()
 
 
 if __name__ == '__main__':
